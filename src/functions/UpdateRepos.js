@@ -16,33 +16,27 @@ app.http('UpdateRepos', {
         
         try {
 
-            // const organizations = await octokit.request('GET /organizations', {
-            //     headers: {
-            //         'X-GitHub-Api-Version': '2022-11-28'
-            //     }
-            // })
+            var orgName = 'tools'
 
-            // context.log(organizations.data.forEach(org => {org.login}))
-
-            const repos = await octokit.request('GET /orgs/testorg/repos/', {
+            const repos = await octokit.request(`GET /orgs/${orgName}/repos/`, {
                 headers: {
                     'X-GitHub-Api-Version': '2022-11-28'
                 }
             })
-            context.log(repos)
+            // context.log(repos)
 
-            // repos.data.forEach(async (repo) => {
-            //     try {
-            //         await octokit.request(`PATCH repos/${repo.owner.login}/${repo.name}`, {
-            //             permission: 'push',
-            //             headers: {
-            //                 'X-GitHub-Api-Version': '2022-11-28'
-            //             }
-            //         })
-            //     } catch (error) {
-            //         context.error(error)
-            //     }
-            // })
+            repos.data.forEach(async (repo) => {
+                try {
+                    await octokit.request(`PATCH /repos/${repo.owner.login}/${repo.name}`, {
+                        'private': true,
+                        headers: {
+                            'X-GitHub-Api-Version': '2022-11-28'
+                        }
+                    })
+                } catch (error) {
+                    context.error(error)
+                }
+            })
 
             // organizations.forEach(async (org) => {
             //     try {
