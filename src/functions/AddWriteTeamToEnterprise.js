@@ -10,8 +10,8 @@ app.http('AddWriteTeamToEnterprise', {
         context.log(`Http function processed request for url "${request.url}"`)
 
         const octokit = new Octokit({
-            auth: '',
-            baseUrl: "https://github.leneldev.com/api/v3"
+            auth: `${process.env["GITHUB_TOKEN"]}`,
+            baseUrl: `${process.env["GITHUB_URL"]}`
         })
         
         try {
