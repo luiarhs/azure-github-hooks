@@ -4,7 +4,7 @@ const { Octokit } = require("@octokit/core");
 
 
 app.http('UpdateRepos', {
-    methods: ['POST'],
+    methods: ['PUT'],
     authLevel: 'anonymous',
     handler: async (request, context) => {
         context.log(`Http function processed request for url "${request.url}"`)
