@@ -1,6 +1,6 @@
 const { app } = require('@azure/functions');
 
-app.http('AddUsersOnGithubOrgCreate', {
+app.http('OnGithubOrgCreate', {
     methods: ['GET', 'POST'],
     authLevel: 'anonymous',
     handler: async (request, context) => {
