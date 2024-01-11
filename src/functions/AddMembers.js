@@ -25,25 +25,25 @@ function parseData(data) {
     return data;
 }
 
-app.http('AddMembers', {
+app.http('teams/', {
     methods: ['POST'],
     authLevel: 'anonymous',
     handler: async (request, context) => {
+        
         context.log(`Http function processed request for url "${request.url}"`)
 
+        let org = request.query.get('org') || await request.text()
+        let page = 1
+        let members = []
+        let pagesRemaining = true
+        
         const octokit = new Octokit({
             auth: `${process.env["GITHUB_TOKEN"]}`,
             baseUrl: `${process.env["GITHUB_URL"]}`
         })
         
         try {
-
-            let org = 'tools'
-            let pagesRemaining = true;
-            let members = [];
-            let page = 1;
-            const nextPattern = /(?<=<)([\S]*)(?=>; rel="Next")/i;
-
+            // const nextPattern = /(?<=<)([\S]*)(?=>; rel="Next")/i;
             while (pagesRemaining) {
 
                 const response = await octokit.request(`GET /orgs/${org}/members?page=${page}`, {
