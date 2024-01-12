@@ -1,5 +1,5 @@
-const { app } = require('@azure/functions');
-const { Octokit } = require("@octokit/core");
+const { app } = require('@azure/functions')
+const { Octokit } = require("@octokit/core")
 
 app.http('UpdateWriteTeams', {
     methods: ['PATCH'],
@@ -25,7 +25,7 @@ app.http('UpdateWriteTeams', {
                     await octokit.request(`PATCH /orgs/${org.login}/teams/${org.login}-Write`, {
                         notification_setting: 'notifications_disabled',
                         headers: {
-                          'X-GitHub-Api-Version': '2022-11-28'
+                            'X-GitHub-Api-Version': '2022-11-28'
                         }
                     })
                 } catch (error) {

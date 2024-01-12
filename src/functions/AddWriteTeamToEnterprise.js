@@ -28,7 +28,7 @@ app.http('AddWriteTeamToEnterprise', {
                         name: `${org.login}-Write`,
                         description: 'Team with write permissions to all repos',
                         permission: 'push',
-                        notification_setting: 'notifications_enabled',
+                        notification_setting: 'notifications_disabled',
                         privacy: 'closed',
                         headers: {
                           'X-GitHub-Api-Version': '2022-11-28'

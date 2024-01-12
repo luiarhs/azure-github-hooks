@@ -25,7 +25,7 @@ function parseData(data) {
     return data;
 }
 
-app.http('teams/', {
+app.http('AddMembers', {
     methods: ['POST'],
     authLevel: 'anonymous',
     handler: async (request, context) => {
