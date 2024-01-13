@@ -28,14 +28,15 @@ function parseData(data) {
 app.http('AddMembers', {
     methods: ['POST'],
     authLevel: 'anonymous',
+    route: 'members/{org:alpha}',
     handler: async (request, context) => {
         
         context.log(`Http function processed request for url "${request.url}"`)
 
-        let org = request.query.get('org') || await request.text()
         let page = 1
         let members = []
         let pagesRemaining = true
+        const org = request.params.org
         
         const octokit = new Octokit({
             auth: `${process.env["GITHUB_TOKEN"]}`,
@@ -76,7 +77,7 @@ app.http('AddMembers', {
                 }
             })
 
-            return { body: 200 }
+            return { status: 200 }
         } catch (error) {
             context.log(`Error! Status: ${error.status}. Message: ${error.response.data.message}`)
             throw error

@@ -15,7 +15,7 @@ app.http('AddReposToWriteTeam', {
         })
         
         try {
-
+            var org = 'VideoTile'
             // const organizations = await octokit.request('GET /organizations', {
             //     headers: {
             //         'X-GitHub-Api-Version': '2022-11-28'
@@ -24,16 +24,16 @@ app.http('AddReposToWriteTeam', {
 
             // context.log(organizations.data.forEach(org => {org.login}))
 
-            const repos = await octokit.request('GET /orgs/testorg/repos/', {
+            const repos = await octokit.request(`GET /orgs/${org}/repos/`, {
+                per_page: 100,
                 headers: {
                     'X-GitHub-Api-Version': '2022-11-28'
                 }
             })
-            context.log(repos)
 
             repos.data.forEach(async (repo) => {
                 try {
-                    await octokit.request(`PUT /orgs/${repo.owner.login}/teams/testorg-write/repos/${repo.owner.login}/${repo.name}`, {
+                    await octokit.request(`PUT /orgs/${repo.owner.login}/teams/${repo.owner.login}-write/repos/${repo.owner.login}/${repo.name}`, {
                         permission: 'push',
                         headers: {
                             'X-GitHub-Api-Version': '2022-11-28'

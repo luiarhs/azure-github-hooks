@@ -4,8 +4,9 @@ const { Octokit } = require("@octokit/core");
 
 
 app.http('UpdateRepos', {
-    methods: ['PUT'],
+    methods: ['PATCH'],
     authLevel: 'anonymous',
+    route: 'repos/{org:alpha}',
     handler: async (request, context) => {
         context.log(`Http function processed request for url "${request.url}"`)
 
@@ -16,9 +17,10 @@ app.http('UpdateRepos', {
         
         try {
 
-            var orgName = 'tools'
+            const org = request.params.org
 
-            const repos = await octokit.request(`GET /orgs/${orgName}/repos/`, {
+            const repos = await octokit.request(`GET /orgs/${org}/repos`, {
+                per_page: 100,
                 headers: {
                     'X-GitHub-Api-Version': '2022-11-28'
                 }
@@ -28,7 +30,7 @@ app.http('UpdateRepos', {
             repos.data.forEach(async (repo) => {
                 try {
                     await octokit.request(`PATCH /repos/${repo.owner.login}/${repo.name}`, {
-                        'private': true,
+                        private: true,
                         headers: {
                             'X-GitHub-Api-Version': '2022-11-28'
                         }
