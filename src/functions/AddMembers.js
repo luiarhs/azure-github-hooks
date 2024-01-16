@@ -1,30 +1,6 @@
 const { app } = require('@azure/functions');
 const { Octokit } = require("@octokit/core");
 
-function parseData(data) {
-    // If the data is an array, return that
-      if (Array.isArray(data)) {
-        return data
-      }
-  
-    // Some endpoints respond with 204 No Content instead of empty array
-    //   when there is no data. In that case, return an empty array.
-    if (!data) {
-      return []
-    }
-  
-    // Otherwise, the array of items that we want is in an object
-    // Delete keys that don't include the array of items
-    delete data.incomplete_results;
-    delete data.repository_selection;
-    delete data.total_count;
-    // Pull out the array of items
-    const namespaceKey = Object.keys(data)[0];
-    data = data[namespaceKey];
-  
-    return data;
-}
-
 app.http('AddMembers', {
     methods: ['POST'],
     authLevel: 'anonymous',
@@ -36,7 +12,7 @@ app.http('AddMembers', {
         let page = 1
         let members = []
         let pagesRemaining = true
-        const org = request.params.org
+        const org = 'OnGuard-Cloud'
         
         const octokit = new Octokit({
             auth: `${process.env["GITHUB_TOKEN"]}`,
