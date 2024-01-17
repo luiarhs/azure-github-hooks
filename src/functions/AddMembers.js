@@ -12,7 +12,7 @@ app.http('AddMembers', {
         let page = 1
         let members = []
         let pagesRemaining = true
-        const org = 'OnGuard-Cloud'
+        const org = request.params.org
         
         const octokit = new Octokit({
             auth: `${process.env["GITHUB_TOKEN"]}`,

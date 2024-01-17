@@ -15,7 +15,7 @@ app.http('AddReposToWriteTeam', {
         })
         
         try {
-            var org = 'VideoTile'
+            const org = request.params.org
             // const organizations = await octokit.request('GET /organizations', {
             //     headers: {
             //         'X-GitHub-Api-Version': '2022-11-28'
