@@ -8,11 +8,6 @@ app.http('AddMembers', {
     handler: async (request, context) => {
         
         context.log(`Http function processed request for url "${request.url}"`)
-
-        let page = 1
-        let members = []
-        let pagesRemaining = true
-        const org = request.params.org
         
         const octokit = new Octokit({
             auth: `${process.env["GITHUB_TOKEN"]}`,
@@ -20,23 +15,15 @@ app.http('AddMembers', {
         })
         
         try {
-            // const nextPattern = /(?<=<)([\S]*)(?=>; rel="Next")/i;
-            while (pagesRemaining) {
-
-                const response = await octokit.request(`GET /orgs/${org}/members?page=${page}`, {
+            const member = await octokit.paginate(
+                'GET /users', {
                     per_page: 100,
-                    page: page++,
                     headers: {
                         'X-GitHub-Api-Version': '2022-11-28'
                     }
-                })
-                // const parsedData = parseData(response.data)
-                members = [...members, ...response.data];
-
-                const linkHeader = response.headers.link;
-
-                pagesRemaining = linkHeader && linkHeader.includes(`rel=\"next\"`);
-            }
+                },
+                response => response.data.map(member => member)
+            )
 
             members.forEach(async (member) => {
                 try {
@@ -58,6 +45,5 @@ app.http('AddMembers', {
             context.log(`Error! Status: ${error.status}. Message: ${error.response.data.message}`)
             throw error
         }
-        // const name = request.query.get('name') || await request.text() || 'world';
     }
 });
